@@ -14,7 +14,7 @@ export const db = new Client({
 export const connectDB = async (): Promise<void> => {
     try {
         await db.connect();
-        console.log('Connected to the PostgreSQL database.');
+        console.log('Welcome to the Employee Tracker Database!');
     } catch (error) {
         console.error('Failed to connect to the database:', error);
         process.exit(1);
