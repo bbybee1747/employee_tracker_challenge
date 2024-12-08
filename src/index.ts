@@ -24,6 +24,12 @@ const menu = async (): Promise<void> => {
                 'Add a Role',
                 'Add an Employee',
                 'Update an Employee Role',
+                'Update employee manager', 
+                'View employees by manager', 
+                'View employees by department', 
+                'Delete a department', 
+                'Delete a role', 
+                'Delete an employee', 
                 'Exit',
             ],
         },
@@ -33,17 +39,21 @@ const menu = async (): Promise<void> => {
         case 'View All Departments':
             console.table(await getDepartments());
             break;
+
         case 'View All Roles':
             console.table(await getRoles());
             break;
+
         case 'View All Employees':
             console.table(await getEmployees());
             break;
+
         case 'Add a Department':
             const { name } = await inquirer.prompt([{ type: 'input', name: 'name', message: 'Enter department name:' }]);
             await addDepartment(name);
             console.log('Department added successfully.');
             break;
+
         case 'Add a Role':
             const departments = await getDepartments();
             const { title, salary, department_id } = await inquirer.prompt([
@@ -54,6 +64,7 @@ const menu = async (): Promise<void> => {
             await addRole(title, parseFloat(salary), department_id);
             console.log('Role added successfully.');
             break;
+
         case 'Add an Employee':
             const roles = await getRoles();
             const employees = await getEmployees();
@@ -66,6 +77,7 @@ const menu = async (): Promise<void> => {
             await addEmployee(first_name, last_name, role_id, manager_id);
             console.log('Employee added successfully.');
             break;
+
         case 'Update an Employee Role':
             const employeeList = await getEmployees();
             const roleList = await getRoles();
@@ -76,6 +88,7 @@ const menu = async (): Promise<void> => {
             await updateEmployeeRole(employee_id, new_role_id);
             console.log('Employee role updated successfully.');
             break;
+            
         default:
             console.log('Goodbye!');
             process.exit(0);
