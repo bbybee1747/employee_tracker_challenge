@@ -8,6 +8,13 @@ import {
     addRole,
     addEmployee,
     updateEmployeeRole,
+    updateEmployeeManager,
+    deleteDepartment,
+    deleteRole,
+    deleteEmployee,
+    getEmployeesByManager,
+    getEmployeesByDepartment,
+    getManagers
 } from './queries';
 
 const menu = async (): Promise<void> => {
@@ -87,6 +94,63 @@ const menu = async (): Promise<void> => {
             ]);
             await updateEmployeeRole(employee_id, new_role_id);
             console.log('Employee role updated successfully.');
+            break;
+
+        case 'Update employee manager':
+            const employeesList = await getEmployees();
+            const { employee_id: empId, manager_id: manId } = await inquirer.prompt([
+                { type: 'list', name: 'employee_id', message: 'Select employee to update:', choices: employeesList.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id })) },
+                { type: 'list', name: 'manager_id', message: 'Select new manager:', choices: employeesList.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id })) },
+            ]);
+            await updateEmployeeManager(empId, manId);
+            console.log('Employee manager updated successfully.');
+            break;
+
+        case 'Delete a department':
+            const departmentsListToDelete = await getDepartments();
+            const { department_id: deptId } = await inquirer.prompt([
+                { type: 'list', name: 'department_id', message: 'Select department to delete:', choices: departmentsListToDelete.map(dept => ({ name: dept.name, value: dept.id })) },
+            ]);
+            await deleteDepartment(deptId);
+            console.log('Department deleted successfully.');
+            break;
+
+        case 'Delete a role':
+            const rolesList = await getRoles();
+            const { role_id: roleId } = await inquirer.prompt([
+                { type: 'list', name: 'role_id', message: 'Select role to delete:', choices: rolesList.map(role => ({ name: role.title, value: role.id })) },
+            ]);
+            await deleteRole(roleId);
+            console.log('Role deleted successfully.');
+            break;
+
+        case 'Delete an employee':
+            const employeesListToDelete = await getEmployees();
+            const { employee_id: empIdToDelete } = await inquirer.prompt([
+                { type: 'list', name: 'employee_id', message: 'Select employee to delete:', choices: employeesListToDelete.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id })) },
+            ]);
+            await deleteEmployee(empIdToDelete);
+            console.log('Employee deleted successfully.');
+            break;
+        
+        case 'View employees by manager':
+            const managersList = await getManagers();
+            const { manager_id: manIdView } = await inquirer.prompt([
+                { type: 'list', name: 'manager_id', message: 'Select manager to view employees:', choices: managersList.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id })) },
+            ]);
+            console.table(await getEmployeesByManager(manIdView));
+            break;
+
+        case 'View employees by department':
+            const departmentsListToView = await getDepartments();
+            const { department_id: deptIdView } = await inquirer.prompt([
+                { type: 'list', name: 'department_id', message: 'Select department to view employees:', choices: departmentsListToView.map(dept => ({ name: dept.name, value: dept.id })) },
+            ]);
+            console.table(await getEmployeesByDepartment(deptIdView));
+            break;
+        
+        case "Get the Managers List":
+            console.table(await getManagers());
             break;
             
         default:
