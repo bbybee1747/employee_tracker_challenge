@@ -154,7 +154,7 @@ const menu = async (): Promise<void> => {
             break;
             
         default:
-            console.log('Goodbye!');
+            console.log('Have a great Day!!');
             process.exit(0);
     }
 
